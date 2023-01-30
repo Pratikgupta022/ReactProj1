@@ -1,10 +1,14 @@
-import React from 'react'
+import React from 'react';
+// import Resturant from './component/Basics/Resturant';
+// import UseState from './component/Hooks/UseState';
+import useEffect from './component/Hooks/useEffect';
 
 const App = () => {
   return (
     <>
-      <div>Pratik Gupta</div>
-      <img src="" alt="" />
+      {/* <Resturant/> */}
+      {/* <UseState/> */}
+      <useEffect/>
     </>
   )
 }
