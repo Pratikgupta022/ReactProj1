@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import "./style.css";
 
-const useEffect = () => {
+const UseEffect = () => {
     const [MyNum, setMyNum] = useState(0);
+    useEffect(() =>{
+      document.title = `chats(${MyNum})`
+    });
+
   return (
     <>
         <div className="center_div">
@@ -15,9 +19,8 @@ const useEffect = () => {
                 Increment
             </div>
         </div>
-
     </>
   )
 }
 
-export default useEffect
+export default UseEffect
