@@ -1,7 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./style.css";
+import './weatherCard';
+import WeatherCard from './weatherCard';
 
 const Temp = () => {
+  const [searchvalue,setSearchValue] = useState("mumbai");
+  const [tempInfo,setTempInfo] = useState({});
+  const getWeatherInfo = async () =>{
+    try{
+      let url = `https://api.openweathermap.org/data/2.5/weather?q=${searchvalue}&units=metric&appid=85ce8262596ac389c10c0fd21d3b3460`;
+      let res = await fetch(url);
+      let data = await res.json();
+      console.log(data);
+      const {humidity,temp,pressure} = data.main;
+      const {sunrise,country} = data.sys;
+      const {speed} = data.wind;
+      const {main:weatherMood} = data.weather[0];
+      const {name:cityName} = data;
+
+      const myWeatherInfo = {
+        humidity,temp,pressure,sunrise,country,speed,weatherMood,cityName
+      }
+      setTempInfo(myWeatherInfo);
+    }catch(error){
+      console.log("error");
+    }
+  }
+  useEffect(() => {
+    getWeatherInfo();
+  }, []);
   return (
     <>
     {/* 85ce8262596ac389c10c0fd21d3b3460
@@ -9,50 +36,12 @@ const Temp = () => {
     https://api.openweathermap.org/data/2.5/weather?q=mumbai&appid=85ce8262596ac389c10c0fd21d3b3460 */}
     <div className="wrap">
       <div className="search">
-        <input type="search" id="search" autoFocus placeholder='Search ...' className='searchTerm'  />
-        <button className="serchButton" type="button">Search</button>
+        <input type="search" id="search" autoFocus placeholder='Search ...' className='searchTerm' value={searchvalue} onChange={(e)=>setSearchValue(e.target.value)} />
+        <button className="serchButton" type="button" onClick={getWeatherInfo}>Search</button>
       </div>
     </div>
     {/* Our temp card */}
-    <article className="widget">
-      <div className="weatherIcon">
-        <i className={'wi wi-day-sunny'}></i>
-      </div>
-      <div className="weatherInfo">
-        <div className="temperature">
-          <span>35.5&deg;</span>
-        </div>
-        <div className="description">
-          <div className="weatherCondition">Sunny</div>
-          <div className="place">Mumbai, India</div>
-        </div>
-      </div>
-      <div className="date">{new Date().toLocaleString()}</div>
-
-      {/* Our 4 column selection */}
-      <div className="extra-temp">
-        <div className="extra-info-minmax">
-          <div className="two-sided-section">
-            <p><i className={"wi wi-sunset"}></i></p>
-            <p className="extra-info-leftside">19:18<br/> Sunset</p>
-          </div>
-          <div className="two-sided-section">
-            <p><i className={"wi wi-humidity"}></i></p>
-            <p className="extra-info-leftside">19:18<br/> HUMIDITY</p>
-          </div>
-        </div>
-        <div className="extra-info-minmax">
-          <div className="two-sided-section">
-            <p><i className={"wi wi-humidity"}></i></p>
-            <p className="extra-info-leftside">19:18<br/> HUMIDITY</p>
-          </div>
-          <div className="two-sided-section">
-            <p><i className={"wi wi-humidity"}></i></p>
-            <p className="extra-info-leftside">19:18<br/> HUMIDITY</p>
-          </div>
-        </div>
-      </div>
-    </article>
+    <WeatherCard tempInfo = {tempInfo}/>
     </>
   )
 }
